@@ -1,0 +1,100 @@
+/* ============================================================
+   webgl-bg.css
+   أضف هذا الملف بعد ملف CSS الأصلي في HTML:
+   <link rel="stylesheet" href="webgl-bg.css">
+   ============================================================ */
+
+/* ── الخلفية WebGL ثابتة خلف كل شيء ── */
+#webgl-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    display: block;
+}
+
+/* ── اجعل خلفية الـ body شفافة لتظهر الخلفية ── */
+body {
+    background: transparent !important;
+}
+
+/* ── اجعل الـ header شفافاً ── */
+header {
+    background: rgba(5, 5, 20, 0.55) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200, 255, 71, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* ── بطاقة زجاجية شفافة لكل section ── */
+section {
+    background: rgba(8, 8, 20, 0.45) !important;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(200, 255, 71, 0.12);
+    border-radius: 18px;
+    margin: 2rem auto;
+    max-width: 1100px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ── الـ footer ── */
+footer {
+    background: rgba(5, 5, 20, 0.7) !important;
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(200, 255, 71, 0.12);
+    text-align: center;
+    padding: 1.5rem;
+    color: #6a6a7e;
+}
+
+/* ============================================================
+   تأثير الظهور عند السكرول (Reveal Effect)
+   كل عنصر يحمل class="reveal" سيظهر بتأثير جميل
+   ============================================================ */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* تأخير تتابعي للعناصر داخل نفس الـ section */
+.reveal:nth-child(1)  { transition-delay: 0.00s; }
+.reveal:nth-child(2)  { transition-delay: 0.10s; }
+.reveal:nth-child(3)  { transition-delay: 0.18s; }
+.reveal:nth-child(4)  { transition-delay: 0.26s; }
+.reveal:nth-child(5)  { transition-delay: 0.34s; }
+.reveal:nth-child(6)  { transition-delay: 0.42s; }
+.reveal:nth-child(7)  { transition-delay: 0.50s; }
+.reveal:nth-child(8)  { transition-delay: 0.58s; }
+.reveal:nth-child(9)  { transition-delay: 0.66s; }
+
+/* ── خط مضيء يظهر عند السكرول ── */
+.glow-line {
+    width: 3rem;
+    height: 1px;
+    background: #c8ff47;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: 0 0 8px #c8ff47aa;
+}
+
+.glow-line.visible {
+    opacity: 1;
+    transform: scaleX(1);
+}

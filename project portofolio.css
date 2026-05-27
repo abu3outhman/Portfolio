@@ -1,0 +1,1316 @@
+/* =============================================
+   GLOBAL RESET & BASE
+   ============================================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: transparent;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* =============================================
+   HEADER / NAV — GLASSMORPHISM STICKY BAR
+   ============================================= */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+#main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem;
+    background: rgba(10, 10, 30, 0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    transition: background 0.3s ease;
+}
+
+/* ---- Logo ---- */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+}
+
+.logo img {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(167, 139, 250, 0.5);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.08) rotate(4deg);
+    box-shadow: 0 0 14px rgba(167, 139, 250, 0.6);
+}
+
+/* ---- Nav Links ---- */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+}
+
+.nav-links li a {
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    color: rgba(220, 220, 255, 0.85);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border-radius: 8px;
+    transition: color 0.25s ease, background 0.25s ease;
+}
+
+/* Animated underline */
+.nav-links li a::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 60%;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #a78bfa, #60a5fa);
+    transition: transform 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #fff;
+    background: rgba(167, 139, 250, 0.1);
+}
+
+.nav-links li a:hover::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+/* ---- Hamburger Button ---- */
+.nav-toggle {
+    display: none;          /* hidden on desktop */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease;
+    flex-shrink: 0;
+}
+
+.nav-toggle:hover {
+    background: rgba(167, 139, 250, 0.2);
+    border-color: rgba(167, 139, 250, 0.6);
+}
+
+.nav-toggle .bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: #c4b5fd;
+    transition: transform 0.35s ease, opacity 0.35s ease, width 0.35s ease;
+}
+
+/* Hamburger → X animation */
+.nav-toggle.active .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+    width: 0;
+}
+
+.nav-toggle.active .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =============================================
+   RESPONSIVE — MOBILE (≤ 768px)
+   ============================================= */
+@media (max-width: 768px) {
+
+    #main-nav {
+        flex-wrap: wrap;
+        padding: 0.75rem 1.25rem;
+        gap: 0.5rem;
+    }
+
+    .nav-toggle {
+        display: flex;     /* show hamburger */
+    }
+
+    /* Full-width dropdown menu, hidden by default */
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        gap: 0;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                    opacity   0.3s ease;
+        opacity: 0;
+    }
+
+    /* Open state toggled by JS */
+    .nav-links.open {
+        max-height: 320px;
+        opacity: 1;
+    }
+
+    .nav-links li {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 0.85rem 1rem;
+        border-radius: 0;
+        font-size: 1rem;
+    }
+
+    .nav-links li a::after {
+        display: none; /* remove underline on mobile */
+    }
+
+    .nav-links li a:hover {
+        background: rgba(167, 139, 250, 0.12);
+        padding-left: 1.5rem;        /* subtle indent on hover */
+        transition: padding-left 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .logo h1 {
+        font-size: 1rem;
+    }
+}
+
+/* =============================================
+   RESPONSIVE — VERY SMALL (≤ 420px)
+   ============================================= */
+@media (max-width: 420px) {
+    .logo h1 {
+        font-size: 0.88rem;
+    }
+
+    #main-nav {
+        padding: 0.6rem 1rem;
+    }
+}
+
+/* =============================================
+   ABOUT SECTION
+   ============================================= */
+.about {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Soft radial background glow */
+.about::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 50% at 20% 50%, rgba(167, 139, 250, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 50%, rgba(96, 165, 250, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* ---- Two-column layout ---- */
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    max-width: 1100px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* ---- Text column ---- */
+.about-text {
+    flex: 1 1 55%;
+}
+
+.about-tag {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #a78bfa;
+    margin-bottom: 0.75rem;
+    opacity: 0.85;
+}
+
+.about-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #e0d7ff 0%, #a78bfa 40%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Paragraph base — words are injected by JS */
+.typewriter-paragraph {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: rgba(200, 210, 255, 0.78);
+    font-weight: 400;
+}
+
+/* Each word injected by JS — terminal-typing rhythm */
+.typewriter-paragraph .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: wordReveal 0.25s ease forwards;
+    animation-delay: calc(var(--i) * 0.1s);   /* 0.1s gap = terminal feel */
+}
+
+@keyframes wordReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- Image column ---- */
+.about-image {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-glow-ring {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    padding: 4px;
+    box-shadow:
+        0 0 40px rgba(167, 139, 250, 0.35),
+        0 0 80px rgba(96, 165, 250, 0.2);
+}
+
+/* The spinning gradient border */
+.image-glow-ring::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        #a78bfa, #60a5fa, #34d399, #a78bfa
+    );
+    animation: spinRing 6s linear infinite;
+    z-index: -2;
+}
+
+@keyframes spinRing {
+    to { filter: hue-rotate(360deg); }
+}
+
+/* Inner block background to mask the gradient center */
+.image-glow-ring::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: #0a0a1e;
+    z-index: -1;
+}
+
+.image-glow-ring img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    /* Subtle float animation */
+    animation: floatImg 5s ease-in-out infinite;
+}
+
+@keyframes floatImg {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-10px); }
+}
+
+/* =============================================
+   ABOUT — RESPONSIVE
+   ============================================= */
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column-reverse;  /* image on top on mobile */
+        gap: 2.5rem;
+        text-align: center;
+    }
+
+    .image-glow-ring {
+        width: 200px;
+        height: 200px;
+    }
+
+    .about-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .about {
+        padding: 4rem 1rem;
+    }
+
+    .image-glow-ring {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+/* =============================================
+   SKILLS SECTION
+   ============================================= */
+.skills {
+    padding: 6rem 2rem;
+    position: relative;
+}
+
+/* ---- Section header — title lives OUTSIDE the grid ---- */
+.skills-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.section-tag {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a78bfa;
+    margin-bottom: 0.6rem;
+}
+
+.skills-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0d7ff 0%, #a78bfa 40%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ---- 2-column card grid ---- */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ---- Individual card — entrance animation base state ---- */
+.skill-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.6rem 1.75rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(167, 139, 250, 0.15);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    /* Entrance: start invisible, shifted down */
+    opacity: 0;
+    transform: translateY(50px) scale(0.96);
+    transition:
+        opacity    0.55s ease calc(var(--delay, 0s)),
+        transform  0.55s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--delay, 0s)),
+        box-shadow 0.3s  ease,
+        border-color 0.3s ease;
+}
+
+/* Visible state — added by JS IntersectionObserver */
+.skill-card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* ::before — inner radial glow (shows on hover) */
+.skill-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: radial-gradient(circle at 30% 50%,
+        rgba(167, 139, 250, 0.1), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ::after — shimmer light sweep on hover */
+.skill-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.07) 50%,
+        transparent 80%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.0s;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Hover: lift + glow border + trigger inner effects */
+.skill-card:hover {
+    box-shadow:
+        0 16px 48px rgba(167, 139, 250, 0.22),
+        0 0 0 1px rgba(167, 139, 250, 0.35),
+        0 0 24px rgba(96, 165, 250, 0.1) inset;
+    border-color: rgba(167, 139, 250, 0.45);
+    animation: cardPulseBorder 2s ease-in-out infinite;
+}
+
+.skill-card:hover::before { opacity: 1; }
+
+/* Shimmer sweeps across on hover */
+.skill-card:hover::after {
+    left: 140%;
+    transition: left 0.65s ease;
+}
+
+/* Pulsing border glow keyframe */
+@keyframes cardPulseBorder {
+    0%, 100% {
+        box-shadow:
+            0 16px 48px rgba(167, 139, 250, 0.22),
+            0 0 0 1px rgba(167, 139, 250, 0.35);
+    }
+    50% {
+        box-shadow:
+            0 16px 60px rgba(167, 139, 250, 0.35),
+            0 0 0 1px rgba(167, 139, 250, 0.6),
+            0 0 30px rgba(96, 165, 250, 0.15) inset;
+    }
+}
+
+/* ---- Text side ---- */
+.skill-text {
+    flex: 1 1 55%;
+    min-width: 0;
+}
+
+.skill-text h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #c4b5fd;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+}
+
+.skill-text p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(190, 200, 255, 0.72);
+}
+
+/* ---- Media side (image / lottie) ---- */
+.skill-media {
+    flex: 0 0 110px;
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skill-media img,
+.skill-media dotlottie-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.25));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.skill-card:hover .skill-media img,
+.skill-card:hover .skill-media dotlottie-player {
+    filter: drop-shadow(0 0 14px rgba(167, 139, 250, 0.5));
+    transform: scale(1.05);
+}
+
+/* =============================================
+   SKILLS — RESPONSIVE
+   ============================================= */
+@media (max-width: 900px) {
+    .skills-grid {
+        grid-template-columns: 1fr;   /* 1 column on tablets */
+    }
+}
+
+@media (max-width: 540px) {
+    .skill-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .skill-media {
+        width: 90px;
+        height: 90px;
+    }
+
+    .skills {
+        padding: 4rem 1rem;
+    }
+}
+
+/* =============================================
+   SERVICES SECTION
+   ============================================= */
+.services {
+    padding: 6rem 2rem;
+    position: relative;
+}
+
+/* ---- Section header (same style as skills) ---- */
+.services-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.services-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #e0d7ff 0%, #a78bfa 40%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ---- 3-column card grid ---- */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ---- Individual service card ---- */
+.service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(167, 139, 250, 0.15);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    /* Entrance animation */
+    opacity: 0;
+    transform: translateY(50px) scale(0.96);
+    transition:
+        opacity    0.55s ease calc(var(--delay, 0s)),
+        transform  0.55s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--delay, 0s)),
+        box-shadow 0.3s  ease,
+        border-color 0.3s ease;
+}
+
+/* Visible state */
+.service-card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* ::before — inner radial glow (shows on hover) */
+.service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: radial-gradient(circle at 50% 50%,
+        rgba(167, 139, 250, 0.1), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ::after — shimmer light sweep on hover */
+.service-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.07) 50%,
+        transparent 80%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.0s;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Hover: lift + glow border + trigger inner effects */
+.service-card:hover {
+    box-shadow:
+        0 16px 48px rgba(167, 139, 250, 0.22),
+        0 0 0 1px rgba(167, 139, 250, 0.35),
+        0 0 24px rgba(96, 165, 250, 0.1) inset;
+    border-color: rgba(167, 139, 250, 0.45);
+    animation: cardPulseBorder 2s ease-in-out infinite;
+}
+
+.service-card:hover::before { opacity: 1; }
+.service-card:hover::after { left: 140%; transition: left 0.65s ease; }
+
+/* Pulsing border glow keyframe (same as skills) */
+@keyframes cardPulseBorder {
+    0%, 100% {
+        box-shadow:
+            0 16px 48px rgba(167, 139, 250, 0.22),
+            0 0 0 1px rgba(167, 139, 250, 0.35);
+    }
+    50% {
+        box-shadow:
+            0 16px 60px rgba(167, 139, 250, 0.35),
+            0 0 0 1px rgba(167, 139, 250, 0.6),
+            0 0 30px rgba(96, 165, 250, 0.15) inset;
+    }
+}
+
+/* ---- Service card content ---- */
+.service-card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #c4b5fd;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
+}
+
+.service-card h5 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #a78bfa;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.service-card p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: rgba(190, 200, 255, 0.72);
+    margin-bottom: 1rem;
+}
+
+.service-card img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 1.2rem;
+    filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.3));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.service-card:hover img {
+    filter: drop-shadow(0 0 18px rgba(167, 139, 250, 0.5));
+    transform: scale(1.05);
+}
+
+/* ---- The "Let's Build It!" button (From Uiverse.io by StealthWorm) ---- */
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 13rem;
+  overflow: hidden;
+  height: 3rem;
+  background-size: 300% 300%;
+  cursor: pointer;
+  backdrop-filter: blur(1rem);
+  border-radius: 5rem;
+  transition: 0.5s;
+  animation: gradient_301 5s ease infinite;
+  border: double 4px transparent;
+  background-image: linear-gradient(#212121, #212121),
+    linear-gradient(
+      137.48deg,
+      #ffdb3b 10%,
+      #fe53bb 45%,
+      #8f51ea 67%,
+      #0044ff 87%
+    );
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  margin-top: auto; /* Ensure button stays at the bottom of the card */
+}
+
+.container-stars {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: 0.5s;
+  backdrop-filter: blur(1rem);
+  border-radius: 5rem;
+}
+
+.btn strong {
+  z-index: 2;
+  font-family: "Avalors Personal Use", sans-serif;
+  font-size: 12px;
+  letter-spacing: 5px;
+  color: #ffffff;
+  text-shadow: 0 0 4px white;
+}
+
+.glow {
+  position: absolute;
+  display: flex;
+  width: 12rem;
+}
+
+.circle {
+  width: 100%;
+  height: 30px;
+  filter: blur(2rem);
+  animation: pulse_3011 4s infinite;
+  z-index: -1;
+}
+
+.circle:nth-of-type(1) {
+  background: rgba(254, 83, 186, 0.636);
+}
+
+.circle:nth-of-type(2) {
+  background: rgba(142, 81, 234, 0.704);
+}
+
+.btn:hover .container-stars {
+  z-index: 1;
+  background-color: #212121;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+}
+
+.btn:active {
+  border: double 4px #fe53bb;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation: none;
+}
+
+.btn:active .circle {
+  background: #fe53bb;
+}
+
+.stars {
+  position: relative;
+  background: transparent;
+  width: 200rem;
+  height: 200rem;
+}
+
+.stars::after {
+  content: "";
+  position: absolute;
+  top: -10rem;
+  left: -100rem;
+  width: 100%;
+  height: 100%;
+  animation: animStarRotate 90s linear infinite;
+}
+
+.stars::after {
+  background-image: radial-gradient(#ffffff 1px, transparent 1%);
+  background-size: 50px 50px;
+}
+
+.stars::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 170%;
+  height: 500%;
+  animation: animStar 60s linear infinite;
+}
+
+.stars::before {
+  background-image: radial-gradient(#ffffff 1px, transparent 1%);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+@keyframes animStar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-135rem);
+  }
+}
+
+@keyframes animStarRotate {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0);
+  }
+}
+
+@keyframes gradient_301 {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulse_3011 {
+  0% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+  100% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+/* =============================================
+   CONTACT SECTION: SOCIAL BUTTONS (Uiverse)
+   ============================================= */
+
+/* Base container for scattered buttons */
+.follow-btn {
+  position: relative;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 19px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.follow-btn span {
+  position: relative;
+  z-index: 3;
+  transition: opacity 0.3s;
+}
+
+/* Icons styling */
+.follow-btn i {
+  color: #ffffff; /* pure white before explosion */
+}
+
+/* Default hidden star positions inside the button */
+.follow-btn .star-1 { position: absolute; top: 20%; left: 20%; width: auto; height: auto; z-index: -5; transition: all 1s cubic-bezier(0.05, 0.83, 0.43, 0.96); filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+.follow-btn .star-1 i { font-size: 24px; }
+
+.follow-btn .star-2 { position: absolute; top: 45%; left: 45%; width: auto; height: auto; z-index: -5; transition: all 1s cubic-bezier(0, 0.4, 0, 1.01); filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+.follow-btn .star-2 i { font-size: 16px; }
+
+.follow-btn .star-3 { position: absolute; top: 40%; left: 40%; width: auto; height: auto; z-index: -5; transition: all 1s cubic-bezier(0, 0.4, 0, 1.01); filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+.follow-btn .star-3 i { font-size: 10px; }
+
+.follow-btn .star-4 { position: absolute; top: 20%; left: 40%; width: auto; height: auto; z-index: -5; transition: all 0.8s cubic-bezier(0, 0.4, 0, 1.01); filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+.follow-btn .star-4 i { font-size: 12px; }
+
+.follow-btn .star-5 { position: absolute; top: 25%; left: 45%; width: auto; height: auto; z-index: -5; transition: all 0.6s cubic-bezier(0, 0.4, 0, 1.01); filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+.follow-btn .star-5 i { font-size: 18px; }
+
+.follow-btn .star-6 { position: absolute; top: 5%; left: 50%; width: auto; height: auto; z-index: -5; transition: all 0.8s ease; filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
+.follow-btn .star-6 i { font-size: 8px; }
+
+/* HOVER: Background transparent, icons explode and adopt brand colors */
+.follow-btn:hover {
+  background: transparent !important;
+}
+
+.follow-btn:hover .star-1 { top: -80%; left: -30%; z-index: 2; }
+.follow-btn:hover .star-2 { top: -40%; left: 16%; z-index: 2; }
+.follow-btn:hover .star-3 { top: 95%; left: 2%; z-index: 2; }
+.follow-btn:hover .star-4 { top: -70%; left: 75%; z-index: 2; }
+.follow-btn:hover .star-5 { top: 35%; left: 115%; z-index: 2; }
+.follow-btn:hover .star-6 { top: 75%; left: 60%; z-index: 2; }
+
+/* --- PER-APP BRAND COLORS --- */
+
+/* Discord */
+.discord-btn { background: #5865F2; border: 3px solid #5865F2; box-shadow: 0 0 0 rgba(88, 101, 242, 0.55); }
+.discord-btn:hover { color: #5865F2; box-shadow: 0 0 25px rgba(88, 101, 242, 0.55); }
+.discord-btn:hover i { color: #5865F2; filter: drop-shadow(0 0 4px #5865F2); }
+
+/* LinkedIn */
+.linkedin-btn { background: #0077B5; border: 3px solid #0077B5; box-shadow: 0 0 0 rgba(0, 119, 181, 0.55); }
+.linkedin-btn:hover { color: #0077B5; box-shadow: 0 0 25px rgba(0, 119, 181, 0.55); }
+.linkedin-btn:hover i { color: #0077B5; filter: drop-shadow(0 0 4px #0077B5); }
+
+/* WhatsApp */
+.whatsapp-btn { background: #25D366; border: 3px solid #25D366; box-shadow: 0 0 0 rgba(37, 211, 102, 0.55); text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+.whatsapp-btn:hover { color: #25D366; box-shadow: 0 0 25px rgba(37, 211, 102, 0.55); text-shadow: none; }
+.whatsapp-btn:hover i { color: #25D366; filter: drop-shadow(0 0 4px #25D366); }
+
+/* Telegram */
+.telegram-btn { background: #0088cc; border: 3px solid #0088cc; box-shadow: 0 0 0 rgba(0, 136, 204, 0.55); }
+.telegram-btn:hover { color: #0088cc; box-shadow: 0 0 25px rgba(0, 136, 204, 0.55); }
+.telegram-btn:hover i { color: #0088cc; filter: drop-shadow(0 0 4px #0088cc); }
+
+/* Email */
+.email-btn { background: #ea4335; border: 3px solid #ea4335; box-shadow: 0 0 0 rgba(234, 67, 53, 0.55); }
+.email-btn:hover { color: #ea4335; box-shadow: 0 0 25px rgba(234, 67, 53, 0.55); }
+.email-btn:hover i { color: #ea4335; filter: drop-shadow(0 0 4px #ea4335); }
+
+
+/* --- THE "BEHIND EMAIL BUTTON" TRICK --- */
+/* We wrap the button so we can position the hidden text perfectly underneath */
+.email-btn-wrapper {
+  position: relative;
+  display: inline-flex; /* align snugly */
+}
+
+/* The text sitting completely underneath the solid red button */
+.email-behind-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ea4335;       /* matches the app color */
+  z-index: 0;           /* 0 puts it behind the button (which has relative) */
+  pointer-events: none; /* so hover goes right through to the button */
+  white-space: nowrap;
+}
+
+/* Hide the 'Email' span when hovered so 'Or Send An Email' can fully show through */
+.email-btn:hover span.btn-text {
+  opacity: 0;
+}
+    
+#projects,
+#contact {
+    display: block;
+    width: 100%;
+    clear: both;
+}
+ 
+#contact {
+    margin-top: 3rem;
+}
+ 
+/* =============================================
+   FOOTER — SOCIAL ICONS (Uiverse Style)
+   ============================================= */
+footer {
+    display: block;
+    width: 100%;
+    clear: both;
+    margin-top: 3rem;
+    padding: 2.5rem 1rem;
+    background: rgba(8, 8, 25, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(167, 139, 250, 0.15);
+    text-align: center;
+}
+ 
+footer .footer-copy {
+    font-size: 0.82rem;
+    color: rgba(180, 180, 220, 0.5);
+    margin-top: 1.5rem;
+    letter-spacing: 0.04em;
+}
+ 
+footer .footer-copy strong {
+    color: #a78bfa;
+}
+ 
+/* ── Social Icons List ── */
+.footer-socials {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+}
+ 
+.footer-socials .icon-content {
+    margin: 0 8px;
+    position: relative;
+}
+ 
+/* Tooltip */
+.footer-socials .icon-content .tooltip {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1a1a2e;
+    color: #e0d7ff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    font-size: 13px;
+    white-space: nowrap;
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+ 
+.footer-socials .icon-content:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    top: -48px;
+}
+ 
+/* Icon circle */
+.footer-socials .icon-content .link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #c4b5fd;
+    background-color: rgba(20, 20, 50, 0.85);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    font-size: 1.3rem;
+}
+ 
+.footer-socials .icon-content .link:hover {
+    box-shadow: 3px 2px 45px 0px rgba(167, 139, 250, 0.2);
+    transform: translateY(-4px);
+    background-color: rgba(30, 30, 70, 0.9);
+}
+ 
+.footer-socials .icon-content .link svg {
+    width: 26px;
+    height: 26px;
+}
+ 
+/* ── Brand colors on hover ── */
+.footer-socials .link[data-social="discord"]:hover  { color: #5865F2; border-color: #5865F2; box-shadow: 0 0 18px rgba(88,101,242,0.45); }
+.footer-socials .link[data-social="linkedin"]:hover { color: #0077B5; border-color: #0077B5; box-shadow: 0 0 18px rgba(0,119,181,0.45); }
+.footer-socials .link[data-social="whatsapp"]:hover { color: #25D366; border-color: #25D366; box-shadow: 0 0 18px rgba(37,211,102,0.45); }
+.footer-socials .link[data-social="telegram"]:hover { color: #0088cc; border-color: #0088cc; box-shadow: 0 0 18px rgba(0,136,204,0.45); }
+.footer-socials .link[data-social="email"]:hover    { color: #ea4335; border-color: #ea4335; box-shadow: 0 0 18px rgba(234,67,53,0.45); }
+ 
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .footer-socials .icon-content .link {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+    }
+    .footer-socials .icon-content {
+        margin: 0 5px;
+    }
+}
+
+/* ── Projects و Contact أصغر حجماً ── */
+#projects,
+#contact {
+    min-height: unset !important;
+    padding: 3rem 2rem;
+}
+
+/* ══════════════════════════════════════
+   1. أزرار السوشيال ميديا — توسيط وتصغير
+   ══════════════════════════════════════ */
+.social-links-grid {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 0.75rem !important;
+}
+
+.follow-btn {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    width: auto !important;
+    min-width: 120px !important;
+    max-width: 160px !important;
+}
+
+/* ══════════════════════════════════════
+   2. بطاقات Services — responsive
+   ══════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .services-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .service-card {
+        padding: 1.25rem 1rem !important;
+    }
+
+    .btn {
+        width: 10rem !important;
+        font-size: 10px !important;
+    }
+}
+
+/* ══════════════════════════════════════
+   3. Responsive عام لكل الصفحة
+   ══════════════════════════════════════ */
+@media (max-width: 768px) {
+    /* About / Projects / Contact */
+    .about-content {
+        flex-direction: column !important;
+        gap: 2rem !important;
+        text-align: center !important;
+    }
+
+    .about-text {
+        flex: 1 1 100% !important;
+    }
+
+    .image-glow-ring {
+        width: 220px !important;
+        height: 220px !important;
+    }
+
+    /* Social buttons */
+    .social-links-grid {
+        justify-content: center !important;
+    }
+
+    .follow-btn {
+        min-width: 100px !important;
+        max-width: 140px !important;
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+    }
+
+    /* Skills */
+    .skills-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Services */
+    .services-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Footer */
+    .footer-socials {
+        gap: 0.4rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-title {
+        font-size: 1.8rem !important;
+    }
+
+    .image-glow-ring {
+        width: 170px !important;
+        height: 170px !important;
+    }
+
+    .follow-btn {
+        min-width: 90px !important;
+        max-width: 120px !important;
+        font-size: 12px !important;
+    }
+
+    #projects,
+    #contact {
+        padding: 2rem 1rem !important;
+    }
+}
