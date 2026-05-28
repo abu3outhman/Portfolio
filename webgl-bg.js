@@ -46,8 +46,8 @@
         uniform vec3  uBg;
 
         #define PI 3.14159265359
-        #define MARCH_STEPS 16
-        #define REFINE_STEPS 4
+        #define MARCH_STEPS 10
+        #define REFINE_STEPS 3
 
         vec3 sCol(vec3 c0,vec3 c1,vec3 c2,vec3 c3,vec3 c4){
             int si=int(uSc); vec3 a=c0,b=c1;
@@ -230,17 +230,20 @@
     let maxScroll = 1;
 
     const resize = () => {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
-        canvas.width  = Math.round(w * dpr);
-        canvas.height = Math.round(h * dpr);
-        canvas.style.width  = w + "px";
-        canvas.style.height = h + "px";
-        gl.viewport(0, 0, canvas.width, canvas.height);
-        gl.uniform2f(uR, canvas.width, canvas.height);
-        maxScroll = Math.max(1, document.documentElement.scrollHeight - h);
-    };
+       const w = window.innerWidth;
+       const h = window.innerHeight;
+       const isMobile = w < 768;
+       const isLowEnd = navigator.hardwareConcurrency <= 4;
+       const quality = isMobile ? 0.5 : isLowEnd ? 0.65 : 0.8;
+       const dpr = Math.min(window.devicePixelRatio || 1, 1.0) * quality;
+       canvas.width  = Math.round(w * dpr);
+       canvas.height = Math.round(h * dpr);
+       canvas.style.width  = w + "px";
+       canvas.style.height = h + "px";
+       gl.viewport(0, 0, canvas.width, canvas.height);
+       gl.uniform2f(uR, canvas.width, canvas.height);
+       maxScroll = Math.max(1, document.documentElement.scrollHeight - h);
+};
 
     resize();
     window.addEventListener("resize", resize, { passive: true });
