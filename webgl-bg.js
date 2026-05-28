@@ -46,8 +46,8 @@
         uniform vec3  uBg;
 
         #define PI 3.14159265359
-        #define MARCH_STEPS 24
-        #define REFINE_STEPS 6
+        #define MARCH_STEPS 16
+        #define REFINE_STEPS 4
 
         vec3 sCol(vec3 c0,vec3 c1,vec3 c2,vec3 c3,vec3 c4){
             int si=int(uSc); vec3 a=c0,b=c1;
@@ -232,7 +232,7 @@
     const resize = () => {
         const w = window.innerWidth;
         const h = window.innerHeight;
-        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
         canvas.width  = Math.round(w * dpr);
         canvas.height = Math.round(h * dpr);
         canvas.style.width  = w + "px";
